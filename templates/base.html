@@ -17,11 +17,11 @@
 				<img class="logo" src="{{ url_for('static', filename='logo.png') }}">
 			</a>
 			{% if g.user %}
-			<span>{{ g.user['name'] }}</span>
-			<a href="{{ url_for('auth.logout') }}" class="brand">Log Out</a>
-			{% else %}
-			<a href="{{ url_for('auth.register') }}" class="brand">Register</a>
-			<a href="{{ url_for('auth.login') }}" class="brand">Log In</a>
+				<span>{{ g.user['name'] }}</span>
+				<a href="{{ url_for('auth.logout') }}" class="brand">Log Out</a>
+				{% else %}
+				<a href="{{ url_for('auth.register') }}" class="brand">Register</a>
+				<a href="{{ url_for('auth.login') }}" class="brand">Log In</a>
 			{% endif %}
 
 			<input id="bmenub" type="checkbox" class="show">
@@ -38,7 +38,7 @@
 		{% endfor %}
 
 		<div class="flex five">
-			{% if g.user %}
+			{% if g.user and context %}
 			<div>
 				<h2><span class="label contacts"><a href="{{ url_for('views.contacts') }}">Contacts</a></span></h2>
 				{% for contact in context.contacts %}
