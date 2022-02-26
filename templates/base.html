@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/picnic">
 <header>
 	<style>
+.logo { height: 40px;	}
 .label.contacts { background-color: #00D7FF; }
 .label.topics { background-color: #313896; }
 .label.actions { background-color: #9F32B2; }
@@ -13,7 +14,7 @@
 	<div style="overflow: hidden;height: 50px;">
 		<nav class="nav__main">
 			<a href="{{ url_for('index') }}" class="brand">
-				<span style="color: blueviolet;">FeltGood</span>
+				<img class="logo" src="{{ url_for('static', filename='logo.png') }}">
 			</a>
 			{% if g.user %}
 			<span>{{ g.user['name'] }}</span>
