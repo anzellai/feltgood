@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}FeltGood - Home{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<h2><span class="label activities">Activities</span></h2>
+<form method="post" action="{{ url_for('views.interactions') }}">
+	<input name="interaction" placeholder="I /{VERB} @{PERSON} who works at #{TOPIC} on [{DATETIME}].">
+	<button class="icon-paper-plane" type="submit">Add</button>
+</form>
+
+<h2><span class="label activities">Upcoming Activities</span></h2>
+{% for upcoming in context.upcomings %}
+<article class="card">
+	<header>
+		<h4>{{ upcoming.when_string }} | {{ upcoming.activity |colourised|safe }}</h4>
+	</header>
+</article>
+{% else %}
+<article class="card">
+	<header>
+		<h4>No upcoming activities.</h4>
+	</header>
+</article>
+{% endfor %}
+
+<h2><span class="label activities">Activities</span></h2>
+{% for i in context.interactions %}
+<article class="card">
+	<header>
+		<h4>{{ i.activity |colourised|safe }}</h4>
+	</header>
+</article>
+{% else %}
+<article class="card">
+	<header>
+		<h4>No activities with your contacts yet.</h4>
+	</header>
+</article>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}FeltGood - Home{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<h2><span class="label topics">Topics</span></h2>
+
+<div class="flex three">
+	{% for topic in context.topics %}
+	<article class="card">
+		<header>
+			<h4><a href="{{ url_for('views.topics') }}/{{ topic.name }}">#{{ topic.name }}</a></h4>
+			<hr>
+			{% for contact in topic.get_contacts() %}
+			<a href="/views/contacts/{{ contact.name }}">
+				<label class="label contacts">
+					{{ contact.name }}
+				</label>
+			</a>
+			{% endfor %}
+		</header>
+	</article>
+	{% else %}
+	<article class="card">
+		<header>
+			<h4>No contacts in your network yet.</h4>
+		</header>
+	</article>
+	{% endfor %}
+</div>
+{% endblock %}

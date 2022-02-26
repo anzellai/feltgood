@@ -1,0 +1,76 @@
+<!doctype html>
+<title>{% block title %}{% endblock %} - FeltGood</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/picnic">
+<header>
+	<style>
+.label.contacts { background-color: #00D7FF; }
+.label.topics { background-color: #313896; }
+.label.actions { background-color: #9F32B2; }
+	</style>
+</header>
+
+<body>
+	<div style="overflow: hidden;height: 50px;">
+		<nav class="nav__main">
+			<a href="{{ url_for('index') }}" class="brand">
+				<span style="color: blueviolet;">FeltGood</span>
+			</a>
+			{% if g.user %}
+			<span>{{ g.user['name'] }}</span>
+			<a href="{{ url_for('auth.logout') }}" class="brand">Log Out</a>
+			{% else %}
+			<a href="{{ url_for('auth.register') }}" class="brand">Register</a>
+			<a href="{{ url_for('auth.login') }}" class="brand">Log In</a>
+			{% endif %}
+
+			<input id="bmenub" type="checkbox" class="show">
+			<label for="bmenub" class="burger pseudo button">Menu</label>
+		</nav>
+	</div>
+
+	<section class="content" style="padding: 20px;">
+		<header>
+			{% block header %}{% endblock %}
+		</header>
+		{% for message in get_flashed_messages() %}
+		<div class="flash">{{ message }}</div>
+		{% endfor %}
+
+		<div class="flex five">
+			{% if g.user %}
+			<div>
+				<h2><span class="label contacts"><a href="{{ url_for('views.contacts') }}">Contacts</a></span></h2>
+				{% for contact in context.contacts %}
+				<div>@<a href="/views/contacts/{{ contact.name }}">{{ contact.name }}</a></div>
+				{% else %}
+				<i>No contacts in your network so far.</i>
+				{% endfor %}
+
+				<br>
+				<hr>
+				<h2><span class="label topics"><a href="{{ url_for('views.topics') }}">Topics</a></span></h2>
+				{% for topic in context.topics %}
+				<div>#<a href="/views/topics/{{ topic.name }}">{{ topic.name }}</a></div>
+				{% else %}
+				<i>No topics in your network so far.</i>
+				{% endfor %}
+
+				<br>
+				<hr>
+				<h2><span class="label actions"><a href="{{ url_for('views.actions') }}">Actions</a></span></h2>
+				{% for action in context.actions %}
+				<div>/<a href="/views/actions/{{ action }}">{{ action }}</a></div>
+				{% else %}
+				<i>No actions in your network so far.</i>
+				{% endfor %}
+			</div>
+			{% endif %}
+
+			<div class="four-fifth">
+
+				{% block content %}{% endblock %}
+
+			</div>
+		</div>
+	</section>
+</body>
