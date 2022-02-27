@@ -28,12 +28,14 @@ def login_required(view):
 @bp.route("/me", methods=("GET",))
 def me():
     import models
+
     return jsonify([p.json for p in models.Person.nodes])
 
 
 @bp.before_app_request
 def load_logged_in_user():
     import models
+
     name = session.get("user")
     if name is None:
         g.user = None
@@ -43,7 +45,11 @@ def load_logged_in_user():
 
 @bp.route("/register", methods=("GET", "POST"))
 def register():
+    if g.user is not None:
+        return redirect(url_for("index"))
+
     import models
+
     if request.method == "POST":
         name = request.form["name"]
         error = None
@@ -66,7 +72,11 @@ def register():
 
 @bp.route("/login", methods=("GET", "POST"))
 def login():
+    if g.user is not None:
+        return redirect(url_for("index"))
+
     import models
+
     if request.method == "POST":
         name = request.form["name"]
         error = None

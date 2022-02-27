@@ -27,7 +27,7 @@ def interactions():
     if interaction == "":
         error = "Interaction is required."
         flash(error)
-        return redirect(url_for("views.index"))
+        return redirect(url_for("index"))
 
     people = models.Person.get_or_create(
         *[{"name": p} for p in re.findall(r"@(\w+)", interaction)]
@@ -54,6 +54,36 @@ def interactions():
                 person.tags.connect(topic, {"when": when})
 
     return redirect(url_for("index"))
+
+@bp.route("/search", methods=("POST",))
+@login_required
+def search():
+    error = None
+    term = request.form.get("term", "").lower()
+    if term == "":
+        error = "Search term is required."
+        flash(error)
+        return redirect(url_for("index"))
+    contacts = filter(lambda x: term in x.name.lower(), g.user.get_contacts())
+    topics = filter(lambda x: term in x.name.lower(), g.user.get_topics())
+    interactions = filter(lambda x: term in x.activity.lower(), g.user.get_interactions())
+    upcomings = g.user.get_upcomings()
+    actions = filter(lambda x: term in x.lower(), g.user.get_actions())
+
+    context = {
+        "term": term,
+        "contacts": [contact for contact in contacts],
+        "topics": [topic for topic in topics],
+        "interactions": interactions,
+        "upcomings": upcomings,
+        "actions": actions,
+    }
+    return render_template(
+        "search.html",
+        context=context,
+    )
+
+
 
 
 ## Contacts

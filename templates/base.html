@@ -7,6 +7,7 @@
 .label.contacts { background-color: #00D7FF; }
 .label.topics { background-color: #313896; }
 .label.actions { background-color: #9F32B2; }
+.label, .button { border-radius: 2em; }
 	</style>
 </header>
 
@@ -17,15 +18,22 @@
 				<img class="logo" src="{{ url_for('static', filename='logo.png') }}">
 			</a>
 			{% if g.user %}
-				<span>{{ g.user['name'] }}</span>
-				<a href="{{ url_for('auth.logout') }}" class="brand">Log Out</a>
-				{% else %}
-				<a href="{{ url_for('auth.register') }}" class="brand">Register</a>
-				<a href="{{ url_for('auth.login') }}" class="brand">Log In</a>
+			<span>{{ g.user['name'] }}</span>
+			<a href="{{ url_for('auth.logout') }}" class="brand">Log Out</a>
+			{% else %}
+			<a href="{{ url_for('auth.register') }}" class="brand">Register</a>
+			<a href="{{ url_for('auth.login') }}" class="brand">Log In</a>
 			{% endif %}
 
 			<input id="bmenub" type="checkbox" class="show">
 			<label for="bmenub" class="burger pseudo button">Menu</label>
+
+			<div class="menu">
+				<a href="{{ url_for('index') }}" class="pseudo label">Home</a>
+				<a href="{{ url_for('views.contacts') }}" class="label contacts">My Contacts</a>
+				<a href="{{ url_for('views.topics') }}" class="label topics">My Topics</a>
+				<a href="{{ url_for('views.actions') }}" class="label actions">My Actions</a>
+			</div>
 		</nav>
 	</div>
 
@@ -36,6 +44,13 @@
 		{% for message in get_flashed_messages() %}
 		<div class="flash">{{ message }}</div>
 		{% endfor %}
+
+		{% if g.user %}
+		<form class="form search-form" method="post" action="{{ url_for('views.search') }}">
+			<input class="input search" name="term" placeholder="Search..." />
+			<button class="button small" type="submit">Search</button>
+		</form>
+		{% endif %}
 
 		<div class="flex five">
 			{% if g.user and context %}
